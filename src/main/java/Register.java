@@ -40,9 +40,9 @@ public class Register extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String usertype = request.getParameter("usertype");
-		String unit="";
-		String amount="";
-		String duedate="";
+		String unit="0";
+		String amount="0";
+		String duedate="None";
 		
 		Registration ru = new Registration(name,username,password,usertype,unit,duedate,amount);
 		

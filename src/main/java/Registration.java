@@ -16,6 +16,9 @@ public class Registration {
 		this.duedate=duedate;
 		this.unit=unit;
 	}
+	public Registration() {
+		// TODO Auto-generated constructor stub
+	}
 	public String getDuedate() {
 		return duedate;
 	}

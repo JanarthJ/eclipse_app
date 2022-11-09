@@ -53,8 +53,11 @@ public class RegistrationDb {
 		return "Data entered successfully";
 	}
 	
-	public List<Registration> login(String username,String password,String usertype) {
-		ArrayList<Registration> consumers = new ArrayList<>();
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public ArrayList login(String username,String password,String usertype) {
+//		ArrayList consumers = new ArrayList();
+		
+		ArrayList list = new ArrayList();
 		loadDriver(dbDriver);
 		try {
 			Connection con;
@@ -67,36 +70,93 @@ public class RegistrationDb {
 			System.out.println(rs.getFetchSize());
 			
 			if(rs.next()) {
+				ArrayList rb = new ArrayList();
 				System.out.println(rs.getString(1));
 				if(usertype.equals("consumer")) {
-					Registration rb = new Registration(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7));
-					consumers.add(rb);
-					return consumers;
+					System.out.println("If part");
+					rb.add(rs.getString(1));
+					rb.add(rs.getString(2));
+//					rb.add(rs.getString(4));
+					rb.add(rs.getString(5));
+					rb.add(rs.getString(6));
+					rb.add(rs.getString(7));
+					System.out.println(rb);
+					list.add(rb);
+					return list;
 				}
-				else {
+				else {					
 					System.out.println("else part");
 					String sqls = "select * from users where usertype='consumer'";
 					PreparedStatement pss = con.prepareStatement(sqls);			
 					ResultSet res = pss.executeQuery();
-					ArrayList<Registration> users = new ArrayList<>();
+					
 					while(res.next()) {
-						Registration rbs = new Registration(res.getString(1),res.getString(2),res.getString(3),res.getString(4),res.getString(5),res.getString(6),res.getString(7));
+						ArrayList rbs = new ArrayList();
+						rbs.add(res.getString(1));
+						rbs.add(res.getString(2));
+//						rbs.add(res.getString(4));
+						rbs.add(res.getString(5));
+						rbs.add(res.getString(6));
+						rbs.add(res.getString(7));
 						System.out.println(rbs);
-						users.add(rbs);
+						list.add(rbs);
 					}					
-					return users;
+					return list;
 				}
 			}
 			else {
-				return consumers;
+				return list;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return consumers;
+			return list;
 		}		
 		
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public ArrayList UpdateBill(String username,String duedate,String unit) {
+			ArrayList list = new ArrayList();
+			loadDriver(dbDriver);
+			try {
+				Connection con;
+				con = getConnection();
+				String sql = "UPDATE users SET unit ='"+unit+"', duedate ='"+duedate+"'WHERE username = '"+username+"'";				
+				System.out.println(sql);
+				PreparedStatement ps = con.prepareStatement(sql);	
+//				ps.executeQuery();
+				ps.executeUpdate();				
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return list;
+			}	
+			try {
+				Connection con;
+				con = getConnection();
+				String sqls = "select * from users where usertype='consumer'";
+				PreparedStatement pss = con.prepareStatement(sqls);			
+				ResultSet res = pss.executeQuery();
+			
+				while(res.next()) {
+					ArrayList rbs = new ArrayList();
+					rbs.add(res.getString(1));
+					rbs.add(res.getString(2));
+	//				rbs.add(res.getString(4));
+					rbs.add(res.getString(5));
+					rbs.add(res.getString(6));
+					rbs.add(res.getString(7));
+					System.out.println(rbs);
+					list.add(rbs);
+				}					
+				return list;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return list;
+			}	
+		}
+	
 
 	
 }
